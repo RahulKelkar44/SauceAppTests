@@ -10,7 +10,7 @@ namespace SauceAppTests.PageObjects
 		private readonly IWebDriver driver;
 
 		//Logger
-		ILogger logger = Log.ForContext<LoginPage>();
+		private readonly ILogger logger = Log.ForContext<LoginPage>();
 
 		//Login Page Elements fields
 		private readonly Lazy<IWebElement> userNameTextBox;
