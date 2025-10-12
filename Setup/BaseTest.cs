@@ -17,21 +17,21 @@ namespace SauceAppTests.Setup
 		{
 			logger.Information("Starting the test run onetime setup");
 			LoggerConfig.Initialize();
-			Driver = DriverFactory.CreateDriver();
 		}
 		[SetUp]
 		public void Setup()
 		{
 			logger.Information("Starting the test run setup");
 			string baseUrl = GlobalVariable.BaseUrl ?? throw new InvalidOperationException("Base URL is not set in GlobalVariable.");
+			Driver = DriverFactory.CreateDriver();
 			Driver!.Navigate().GoToUrl(baseUrl);// Navigate to the login page
 		}
 		[TearDown]
 		public void TearnDown()
 		{
+			Driver!.Quit();
 			logger.Information("Starting the test run teardown");
 			logger.Information("Closing the browser and cleaning up resources");
-			Driver!.Quit();
 		}
 		[OneTimeTearDown]
 		public void OneTimeTearDown()
