@@ -15,8 +15,8 @@ namespace SauceAppTests.Setup
 		[OneTimeSetUp]
 		public void OneTimeSteup()
 		{
-			logger.Information("Starting the test run onetime setup");
 			LoggerConfig.Initialize();
+			logger.Information("Starting the test run onetime setup");
 		}
 		[SetUp]
 		public void Setup()
