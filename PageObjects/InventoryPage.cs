@@ -29,6 +29,27 @@ namespace SauceAppTests.PageObjects
 
 		}
 
+		private string GetProductDataTestAttribute(string productName)
+		{
+			_logger.Information("Getting data-test attribute for product " + productName);
+			const string dataTestAttributePrefix = "add-to-cart-";
+			var productDataTestAttribute = String.Concat(dataTestAttributePrefix,productName.ToLower().Replace(" ","-"));
+			return productDataTestAttribute;
+		}
+		public Lazy<IWebElement> GetProductElementAddTocartBtn(string productName) 
+		{
+			_logger.Information("Getting IWebElement for Add to cart Button for product " + productName);
+			var productDataTestAttribute = GetProductDataTestAttribute(productName);
+			Lazy<IWebElement> product = new Lazy<IWebElement>(() => _driver.FindElement(By.CssSelector($"[data-test = '{productDataTestAttribute}'")));
+			return product;
+		}
+
+		public void AddProductToCart(string productName)
+		{
+			_logger.Information($"Adding {productName} to cart.");
+			var product = GetProductElementAddTocartBtn(productName);
+			product.Value.Click();
+		}
 
 	}
 }
