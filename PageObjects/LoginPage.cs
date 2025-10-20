@@ -1,5 +1,6 @@
 ﻿
 using OpenQA.Selenium;
+using OpenQA.Selenium.DevTools.V139.Storage;
 using Serilog;
 
 namespace SauceAppTests.PageObjects
@@ -7,7 +8,7 @@ namespace SauceAppTests.PageObjects
 	internal class LoginPage
 	{
 		//WebDriver
-		private readonly IWebDriver driver;
+		private readonly IWebDriver _driver;
 
 		//Logger
 		private readonly ILogger logger = Log.ForContext<LoginPage>();
@@ -16,25 +17,29 @@ namespace SauceAppTests.PageObjects
 		private readonly Lazy<IWebElement> userNameTextBox;
 		private readonly Lazy<IWebElement> passwordTextBox;
 		private readonly Lazy<IWebElement> loginButton;
+		private readonly Lazy<IWebElement> errorMessage;
 
 		// Login Page Properties
 		public Lazy<IWebElement> UserNameTextBox => userNameTextBox;
 		public Lazy<IWebElement> PasswordTextBox => passwordTextBox;
 		public Lazy<IWebElement> LoginButton => loginButton;
+		public Lazy<IWebElement> ErrorMessageBox => errorMessage;
 
 
 		// ID locators for the elements
 		private const string userNameId = "user-name";
 		private const string passwordId = "password";
 		private const string loginBtnId = "login-button";
+		private const string errorMessageDataTestAttribute = "[data-test='error']";
 
 		public LoginPage(IWebDriver driver)
 		{
 			logger.Information("Initializing LoginPage with WebDriver.");
-			this.driver = driver ?? throw new ArgumentNullException(nameof(driver), "WebDriver cannot be null.");
-			userNameTextBox = new(() => driver.FindElement(By.Id(userNameId)));
-			passwordTextBox = new(() => driver.FindElement(By.Id(passwordId)));
-			loginButton = new(() => driver.FindElement(By.Id(loginBtnId)));
+			_driver = driver;
+			userNameTextBox = new(() => _driver.FindElement(By.Id(userNameId)));
+			passwordTextBox = new(() => _driver.FindElement(By.Id(passwordId)));
+			loginButton = new(() => _driver.FindElement(By.Id(loginBtnId)));
+			errorMessage = new Lazy<IWebElement>(() => _driver.FindElement(By.CssSelector(errorMessageDataTestAttribute)));
 			logger.Information("LoginPage initialized successfully.");
 		}
 
@@ -52,5 +57,13 @@ namespace SauceAppTests.PageObjects
 			LoginButton.Value.Click();
 			logger.Information("Clicked the login button.");
 		}
+
+		public string GetLoginErrorMessage()
+		{
+			logger.Information("Getting Error Message");
+			var errorMessage = ErrorMessageBox.Value.Text;
+			return errorMessage;
+		}
+
 	}
 }

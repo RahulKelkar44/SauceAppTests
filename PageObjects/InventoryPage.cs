@@ -24,7 +24,7 @@ namespace SauceAppTests.PageObjects
 		{
 			_driver = driver;
 			_logger.Information("Initializing WebElements in Inventorry Page");
-			pageTitle = new Lazy<IWebElement>(() => _driver.FindElement(By.ClassName(pageTitleClassName)));
+			this.pageTitle = new Lazy<IWebElement>(() => _driver.FindElement(By.ClassName(pageTitleClassName)));
 			_logger.Information("Initialization complete in Inventorry Page");
 
 		}
