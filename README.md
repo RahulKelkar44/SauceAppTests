@@ -4,6 +4,9 @@
 This repository contains a Selenium WebDriver test automation framework built using **C#** and **NUnit**.
 The project demonstrates automation best practices such as **Page Object Model (POM)**, **config-driven setup**, and **structured logging with Serilog**.
 
+##Tested Site URL :
+https://www.saucedemo.com/
+
 ---
 
 ## ✨ Features
