@@ -19,7 +19,7 @@ namespace SauceAppTests.SauceAppTests
 		}
 		[TestCase("Test.allTheThings() T-Shirt (Red)")]
 		[Test]
-		public void AddToCart(string itemName) 
+		public void AddToCart(string itemName)
 		{
 			_logger!.Information("Starting AddTo Cart test in Inventory Tests");
 
@@ -30,12 +30,14 @@ namespace SauceAppTests.SauceAppTests
 				Assert.Fail("Login Failed");
 
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			inventoryPage.AddProductToCart(itemName);
+			InventoryItem redTShirt = new(itemName, Driver);
+			redTShirt.AddToCart();
 			Assert.That(inventoryPage.GetShopppingCartItems().Equals(1));
-			Assert.Throws<NoSuchElementException>(() => {
-				var element = inventoryPage.GetProductElementAddTocartBtn(itemName);
-			});
+			Assert.Throws<NoSuchElementException>(
+				() => redTShirt.GetAddToCartBtn()
+			);
 		}
+
 		[TestCase("Name (Z to A)")]
 		[Test]
 		public void ApplySort(string sortName)
