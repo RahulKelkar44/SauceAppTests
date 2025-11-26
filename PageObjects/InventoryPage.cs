@@ -55,12 +55,6 @@ namespace SauceAppTests.PageObjects
 			return product;
 		}
 
-		public void AddProductToCart(string productName)
-		{
-			_logger.Information($"Adding {productName} to cart.");
-			var product = GetProductElementAddTocartBtn(productName);
-			product.Click();
-		}
 
 		public int GetShopppingCartItems()
 		{
@@ -92,7 +86,7 @@ namespace SauceAppTests.PageObjects
 		{
 			_logger.Information($"Getting Name of sort which is currently applied .");
 			return CurrentAppliedSort.Value.Text;
-		}
+		}		
 
 	}
 }
