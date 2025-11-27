@@ -31,11 +31,13 @@ namespace SauceAppTests.SauceAppTests
 
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			InventoryItem redTShirt = new(itemName, Driver);
+			Assert.That(redTShirt.IsRemoveButtonPresent, Is.False);
 			redTShirt.AddToCart();
 			Assert.That(inventoryPage.GetShopppingCartItems().Equals(1));
 			Assert.Throws<NoSuchElementException>(
 				() => redTShirt.GetAddToCartBtn()
 			);
+			Assert.That(redTShirt.IsRemoveButtonPresent, Is.True);
 		}
 
 		[TestCase("Name (Z to A)")]

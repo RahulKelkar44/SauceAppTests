@@ -1,5 +1,6 @@
 ﻿
 using OpenQA.Selenium;
+using SauceAppTests.Utillity.Extensions;
 using Serilog;
 using Serilog.Core;
 using System;
@@ -21,15 +22,18 @@ namespace SauceAppTests.PageObjects
 		private const string ImageClass = "inventory_item_img";
 		private const string InventoryItemClassName = "inventory_item";
 		private const string AddToCartButtonName = "Add to cart";
+		private const string RemoveButtonName = "Remove";
 
 		private readonly Lazy<By> _titleLocator;
 		private readonly Lazy<By> _addToCartBtnLocator;
+		private readonly Lazy<By> _removeBtnLocator;
 		private readonly Lazy<By> _priceLocator;
 		private readonly Lazy<By> _itemImageLocator;
 
 		public string Price => Container.FindElement(_priceLocator.Value).Text;
 		public IWebElement Image => Container.FindElement(_itemImageLocator.Value);
 		public IWebElement AddToCartBtn=> GetAddToCartBtn() ;
+		public IWebElement? RemoveBtn=> GetRemoveFromcartBtn() ;
 		private IWebElement Title => _driver.FindElement(_titleLocator.Value);
 		private IWebElement Container => Title.FindElement(
 				By.XPath($"./ancestor::div[@class='{InventoryItemClassName}']"));
@@ -41,8 +45,9 @@ namespace SauceAppTests.PageObjects
 
 			_titleLocator=new(()=>By.XPath($"//div[contains(@class,'{ItemClass}') and normalize-space(text())='{itemName}']"));
 			_addToCartBtnLocator = new(()=> By.XPath($".//button[normalize-space(text())='{AddToCartButtonName}']" ));
+			_removeBtnLocator = new(() => By.XPath($".//button[normalize-space(text())='{RemoveButtonName}']"));
 
-			_priceLocator= new (()=>By.ClassName(PriceClass));
+			_priceLocator = new (()=>By.ClassName(PriceClass));
 			_itemImageLocator=new(() => By.ClassName(ImageClass));
 		}
 
@@ -58,6 +63,18 @@ namespace SauceAppTests.PageObjects
 			var addToCart = Container.FindElement(_addToCartBtnLocator.Value);
 			return addToCart;
 		}
+		public IWebElement? GetRemoveFromcartBtn()
+		{
+			_logger.Information("Getting Remove from cart Btn through method call");
+			var removeBtn = Container.FindElement(_removeBtnLocator.Value);
+			return removeBtn;
+		}
+
+		public bool IsRemoveButtonPresent()
+		{
+			return Container.IsWebElementPresent(_removeBtnLocator.Value);
+		}
 
 	}
+
 }
