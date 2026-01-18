@@ -14,12 +14,11 @@ namespace SauceAppTests.PageObjects
 
 		//WebElement Fields
 		private readonly Lazy<IWebElement> pageTitle;
-		private readonly Lazy<IWebElement> shoppingCartIcon;
 		private readonly Lazy<IWebElement> currentAppliedSort;
 
 		//Corresponding Property
 		public Lazy<IWebElement> PageTitle  => pageTitle;
-		public Lazy<IWebElement> ShoppingCartIcon => shoppingCartIcon;
+		public Lazy<IWebElement> ShoppingCartIcon => new(()=>_driver.FindElement(shoppingCartIcon_Locator.Value));
 		public Lazy<IWebElement> CurrentAppliedSort => currentAppliedSort;
 
 		// Id Locators for fiding WebElements
@@ -29,12 +28,15 @@ namespace SauceAppTests.PageObjects
 		private const string productSortDataTestAttribute = "product-sort-container";
 		private const string activeSortDataTestAttribute = "active-option";
 
+		private readonly Lazy<By> shoppingCartIcon_Locator;
+
 		public InventoryPage(IWebDriver driver)
 		{
 			_driver = driver;
 			_logger.Information("Initializing WebElements in Inventorry Page");
 			pageTitle = new Lazy<IWebElement>(() => _driver.FindElement(By.ClassName(pageTitleClassName)));
-			shoppingCartIcon = new Lazy<IWebElement>(() => _driver.FindElement(By.ClassName(shoppingCartIconClassName)));
+
+			shoppingCartIcon_Locator = new(() => By.ClassName(shoppingCartIconClassName));
 			currentAppliedSort = new Lazy<IWebElement>(() => _driver.FindElement(By.CssSelector($"[data-test='{activeSortDataTestAttribute}']")));
 			_logger.Information("Initialization complete in Inventorry Page");
 
