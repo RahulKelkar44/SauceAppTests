@@ -57,5 +57,31 @@ namespace SauceAppTests.SauceAppTests
 			string currentSort = inventoryPage.GetCurrentAppliedSortText();
 			Assert.That(currentSort.Equals(sortName));
 		}
+
+		[TestCase("Test.allTheThings() T-Shirt (Red)")]
+		[Test]
+		public void RemoveFromCart(string itemName)
+		{
+			_logger!.Information("Starting AddTo Cart test in Inventory Tests");
+
+			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			loginPage.Login("standard_user", "secret_sauce");
+
+			if (!Driver.Url.Contains("inventory.html"))
+				Assert.Fail("Login Failed");
+
+			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			InventoryItem redTShirt = new(itemName, Driver);
+			Assert.That(redTShirt.IsRemoveButtonPresent, Is.False);
+			redTShirt.AddToCart();
+			inventoryPage.ShoppingCartIcon.Value.Click();
+			var count = inventoryPage.GetShopppingCartItems();
+			Assert.That(count == 1);
+			var yourCart = new YourCart(Driver ?? throw new ArgumentNullException());
+			yourCart.RemoveItemFromCart(itemName);
+			count = inventoryPage.GetShopppingCartItems();
+			Assert.That(count == 0);
+			
+		}
 	}
 }
