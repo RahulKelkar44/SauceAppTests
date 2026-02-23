@@ -88,7 +88,13 @@ namespace SauceAppTests.PageObjects
 		{
 			_logger.Information($"Getting Name of sort which is currently applied .");
 			return CurrentAppliedSort.Value.Text;
-		}		
+		}	
+		
+		public void GoToCart()
+		{
+			_logger.Information("Going to shopping cart");
+			ShoppingCartIcon.Value.Click();
+		}
 
 	}
 }

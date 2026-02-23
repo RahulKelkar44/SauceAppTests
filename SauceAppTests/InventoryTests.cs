@@ -81,7 +81,81 @@ namespace SauceAppTests.SauceAppTests
 			yourCart.RemoveItemFromCart(itemName);
 			count = inventoryPage.GetShopppingCartItems();
 			Assert.That(count == 0);
+
+
 			
+		}
+		[TestCase("Test.allTheThings() T-Shirt (Red)")]
+		[Test]
+		public void ContinueShopping(string itemName)
+		{
+			_logger!.Information("Starting ContinueShopping test in Inventory Tests");
+
+			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			loginPage.Login("standard_user", "secret_sauce");
+
+			if (!Driver.Url.Contains("inventory.html"))
+				Assert.Fail("Login Failed");
+
+			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			InventoryItem redTShirt = new(itemName, Driver);
+			redTShirt.AddToCart();
+			inventoryPage.GoToCart();
+			var yourCart = new YourCart(Driver ?? throw new ArgumentNullException());
+			yourCart.ProccedToCheckOut();
+			Assert.That( new CheckoutStep1(Driver).PageTitle.Value.Displayed, Is.True);	
+		}
+		[TestCase("Test.allTheThings() T-Shirt (Red)")]
+		[Test]
+		public void AddPersonalDetailsForShipping(string itemName)
+		{
+			_logger!.Information("Starting AddPersonalDetailsForShipping test in Inventory Tests");
+
+			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			loginPage.Login("standard_user", "secret_sauce");
+
+			if (!Driver.Url.Contains("inventory.html"))
+				Assert.Fail("Login Failed");
+
+			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			InventoryItem redTShirt = new(itemName, Driver);
+			redTShirt.AddToCart();
+			inventoryPage.GoToCart();
+			var yourCart = new YourCart(Driver ?? throw new ArgumentNullException());
+			yourCart.ProccedToCheckOut();
+			var checkoutStep1Page = new CheckoutStep1(Driver);
+			Assert.That(checkoutStep1Page.PageTitle.Value.Displayed, Is.True);
+			checkoutStep1Page.AddFirstNameAs("Aaron").AddLastNameAs("Kaminisky").AddZipOrPostalCodeAs("London");
+			var a = checkoutStep1Page.FirstName;
+			Assert.That(checkoutStep1Page.FirstName.Equals("Aaron"));
+			Assert.That(checkoutStep1Page.LastName.Equals("Kaminisky"));
+			Assert.That(checkoutStep1Page.ZipOrPostalCode.Equals("London"));
+			checkoutStep1Page.Continue();
+			Assert.That(Driver.Url.Contains("checkout-step-two.html"));
+		}
+		[TestCase("Test.allTheThings() T-Shirt (Red)")]
+		[Test]
+		public void DontAddAllInfo(string itemName)
+		{
+			_logger!.Information("Starting AddPersonalDetailsForShipping test in Inventory Tests");
+
+			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			loginPage.Login("standard_user", "secret_sauce");
+
+			if (!Driver.Url.Contains("inventory.html"))
+				Assert.Fail("Login Failed");
+
+			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			InventoryItem redTShirt = new(itemName, Driver);
+			redTShirt.AddToCart();
+			inventoryPage.GoToCart();
+			var yourCart = new YourCart(Driver ?? throw new ArgumentNullException());
+			yourCart.ProccedToCheckOut();
+			var checkoutStep1Page = new CheckoutStep1(Driver);
+			Assert.That(checkoutStep1Page.PageTitle.Value.Displayed, Is.True);
+			checkoutStep1Page.AddFirstNameAs("A").AddLastNameAs("B");
+			checkoutStep1Page.Continue();
+			checkoutStep1Page.ValidateErrorMessage("postal code is required");
 		}
 	}
 }

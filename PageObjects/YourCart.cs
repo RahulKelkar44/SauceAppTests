@@ -17,11 +17,15 @@ namespace SauceAppTests.PageObjects
 		private const string CartListClassName = "cart_list";
 		private const string CartItemClassName = "cart_item";
 		private const string CartItemName = "inventory_item_name";
+		private const string ContinueBtnName = "Continue Shopping";
+		private const string CheckoutBtnName = "Checkout";
 		private const string CartItemNameXPath = $"//div[@class ='{CartItemName}']";
 
 		private readonly Lazy<By> cartListLocator;
 		private readonly Lazy<By> cartListItemLocator;
 		private readonly Lazy<By> cartItemNameLocator;
+		private readonly Lazy<By> continueBtnLocator;
+		private readonly Lazy<By> checkoutBtnLocator;
 
 		private IWebElement CartList => driver.FindElement(cartListLocator.Value);
 		private IEnumerable<IWebElement> CartItems => driver.FindElements(cartListItemLocator.Value);
@@ -41,6 +45,8 @@ namespace SauceAppTests.PageObjects
 			cartListLocator = new Lazy<By>(() => By.ClassName(CartListClassName));
 			cartListItemLocator = new Lazy<By>(() => By.ClassName(CartItemClassName));
 			cartItemNameLocator = new Lazy<By>(() => By.XPath(CartItemNameXPath));
+			continueBtnLocator = new Lazy<By>(() => By.XPath($"//button[text()='{ContinueBtnName}']"));
+			checkoutBtnLocator = new Lazy<By>(() => By.XPath($"//button[text()='{CheckoutBtnName}']"));
 		}
 
 		#endregion
@@ -51,7 +57,7 @@ namespace SauceAppTests.PageObjects
 		/// Gets all cart item name elements in the cart.
 		/// </summary>
 		/// <returns>An array of IWebElement representing cart item names.</returns>
-		public IWebElement[] GetCartItemTextElements()
+		private IWebElement[] GetCartItemTextElements()
 		{
 			_logger.Information("Getting Cart Item List");
 			var cartItems = CartList.FindElements(cartItemNameLocator.Value);
@@ -64,7 +70,7 @@ namespace SauceAppTests.PageObjects
 		/// <param name="itemName">The name of the item to find.</param>
 		/// <returns>The IWebElement for the specified cart item name.</returns>
 		/// <exception cref="NoSuchElementException">Thrown if the item is not found.</exception>
-		public IWebElement GetCartItemTextElement(string itemName)
+		private IWebElement GetCartItemTextElement(string itemName)
 		{
 			_logger.Information($"Searching for {itemName} in cart.");
 			var cartItemTextElements = GetCartItemTextElements().FirstOrDefault(x => x.Text.Equals(itemName))
@@ -104,15 +110,44 @@ namespace SauceAppTests.PageObjects
 		{
 			_logger.Information("Removing cart item by clicking remove button");
 			WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+			var cartItem = GetCartItem(itemName);
 			var removeButton = wait.Until(driver =>
 			{
-				var cartItem = GetCartItem(itemName);
 				var removeButton = cartItem.FindElement(By.XPath($".//button[text()='Remove']"))
 				?? throw new NoSuchElementException(" remove btn not found .");
-				return (removeButton.Displayed && removeButton.Enabled) ? removeButton : null;
+				return (removeButton.Displayed && removeButton.Enabled) ? removeButton : throw new Exception("abc");
 			});
-			_logger.Information("remove btn found now clicking it ...");
-			removeButton.Click();
+			_logger.Information("remosve btn found now clicking it ...");
+			bool isClicked = false;
+			while (!isClicked)
+			{
+				removeButton.Click();
+				try
+				{
+					removeButton = cartItem.FindElement(By.XPath($".//button[text()='Remove']"));
+				}
+				catch(NoSuchElementException)
+				{
+					_logger.Information("Remove button clicked!");
+					isClicked = true;	
+				}
+			}
+		}
+
+		public void ProccedToCheckOut()
+		{
+			_logger.Information("Proceed to check out.");
+			var checkoutBtn = driver.FindElement(checkoutBtnLocator.Value)
+				?? throw new NoSuchElementException("Checkout button not found");
+			checkoutBtn.Click();
+		}
+
+		public void ContinueShopping()
+		{
+			_logger.Information("User go back to shopping page by clicking continue shopping");
+			var continueShoppingButton = driver.FindElement(continueBtnLocator.Value)
+				?? throw new NoSuchElementException("Continue Shopping button not found");
+			continueShoppingButton.Click();
 		}
 
 		#endregion
