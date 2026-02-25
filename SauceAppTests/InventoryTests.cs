@@ -153,9 +153,37 @@ namespace SauceAppTests.SauceAppTests
 			yourCart.ProccedToCheckOut();
 			var checkoutStep1Page = new CheckoutStep1(Driver);
 			Assert.That(checkoutStep1Page.PageTitle.Value.Displayed, Is.True);
-			checkoutStep1Page.AddFirstNameAs("A").AddLastNameAs("B");
+			checkoutStep1Page.AddFirstNameAs("A").AddZipOrPostalCodeAs("B");
 			checkoutStep1Page.Continue();
-			checkoutStep1Page.ValidateErrorMessage("postal code is required");
+			checkoutStep1Page.ValidateErrorMessage("last name is required");
+		}
+		[TestCase("Test.allTheThings() T-Shirt (Red)")]
+		[Test]
+		public void FinalCheckoutIsMyItemAdded(string itemName)
+		{
+			_logger!.Information("Starting AddPersonalDetailsForShipping test in Inventory Tests");
+
+			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			loginPage.Login("standard_user", "secret_sauce");
+
+			if (!Driver.Url.Contains("inventory.html"))
+				Assert.Fail("Login Failed");
+
+			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
+			InventoryItem redTShirt = new(itemName, Driver);
+			redTShirt.AddToCart();
+			inventoryPage.GoToCart();
+			var yourCart = new YourCart(Driver ?? throw new ArgumentNullException());
+			yourCart.ProccedToCheckOut();
+			var checkoutStep1Page = new CheckoutStep1(Driver);
+			Assert.That(checkoutStep1Page.PageTitle.Value.Displayed, Is.True);
+			checkoutStep1Page.AddFirstNameAs("A").AddLastNameAs("C").AddZipOrPostalCodeAs("B");
+			checkoutStep1Page.Continue();
+			var checkOutStep2Page = new CheckoutStep2(yourCart, Driver);
+			var isItemPresentAtCheckout = checkOutStep2Page.IsItemPresent(itemName);
+			Assert.That(isItemPresentAtCheckout,Is.True);
+			checkOutStep2Page.FinishCheckout();
+			Assert.That(Driver.Url.Contains("complete"));
 		}
 	}
 }
