@@ -81,15 +81,20 @@ namespace SauceAppTests.PageObjects
 			var sortCombobox = _driver.FindElement(By.CssSelector($"[data-test='{productSortDataTestAttribute}']"));
 			SelectElement selectComboBox = new(sortCombobox);
 			selectComboBox.SelectByText(sortOption);
+			WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+			wait.Until(_=> new SelectElement(_driver.FindElement(By.CssSelector($"[data-test='{productSortDataTestAttribute}']")))
+			.SelectedOption.Text.Equals(sortOption));
 
 		}
 
 		public string GetCurrentAppliedSortText()
 		{
-			_logger.Information($"Getting Name of sort which is currently applied .");
-			return CurrentAppliedSort.Value.Text;
-		}	
-		
+			_logger.Information("Getting Name of sort which is currently applied.");
+			var element = CurrentAppliedSort.Value;
+			_logger.Information("CurrentAppliedSort textContent: " + element.GetAttribute("textContent"));
+			return element.GetAttribute("textContent")!;
+		}
+
 		public void GoToCart()
 		{
 			_logger.Information("Going to shopping cart");
