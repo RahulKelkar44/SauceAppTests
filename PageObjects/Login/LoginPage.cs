@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.DevTools.V139.Storage;
 using Serilog;
 
-namespace SauceAppTests.PageObjects
+namespace SauceAppTests.PageObjects.Login
 {
 	internal class LoginPage
 	{

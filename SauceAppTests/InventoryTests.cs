@@ -2,7 +2,9 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using SauceAppTests.PageObjects;
+using SauceAppTests.PageObjects.Login;
 using SauceAppTests.Setup;
+using SauceAppTests.Utillity;
 using Serilog;
 
 namespace SauceAppTests.SauceAppTests
@@ -17,18 +19,13 @@ namespace SauceAppTests.SauceAppTests
 		{
 			_logger = Log.ForContext<InventoryTests>();
 		}
+		
 		[TestCase("Test.allTheThings() T-Shirt (Red)")]
 		[Test]
 		public void AddToCart(string itemName)
 		{
 			_logger!.Information("Starting AddTo Cart test in Inventory Tests");
-
-			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			loginPage.Login("standard_user", "secret_sauce");
-
-			if (!Driver.Url.Contains("inventory.html"))
-				Assert.Fail("Login Failed");
-
+			LoginHelper.Login(Driver ?? throw new Exception("Driver is null")	, TestConfig);
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			InventoryItem redTShirt = new(itemName, Driver);
 			Assert.That(redTShirt.IsRemoveButtonPresent, Is.False);
@@ -45,13 +42,8 @@ namespace SauceAppTests.SauceAppTests
 		public void ApplySort(string sortName)
 		{
 			_logger!.Information("Starting ApplySort Test");
-			
-			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			loginPage.Login("standard_user", "secret_sauce");
 
-			if (!Driver.Url.Contains("inventory.html"))
-				Assert.Fail("Login Failed");
-
+			LoginHelper.Login(Driver ?? throw new Exception("Driver is null"), TestConfig);
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			inventoryPage.SetProductSort(sortName);
 			string currentSort = inventoryPage.GetCurrentAppliedSortText();
@@ -64,12 +56,7 @@ namespace SauceAppTests.SauceAppTests
 		{
 			_logger!.Information("Starting AddTo Cart test in Inventory Tests");
 
-			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			loginPage.Login("standard_user", "secret_sauce");
-
-			if (!Driver.Url.Contains("inventory.html"))
-				Assert.Fail("Login Failed");
-
+			LoginHelper.Login(Driver ?? throw new Exception("Driver is null"), TestConfig);
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			InventoryItem redTShirt = new(itemName, Driver);
 			Assert.That(redTShirt.IsRemoveButtonPresent, Is.False);
@@ -91,12 +78,7 @@ namespace SauceAppTests.SauceAppTests
 		{
 			_logger!.Information("Starting ContinueShopping test in Inventory Tests");
 
-			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			loginPage.Login("standard_user", "secret_sauce");
-
-			if (!Driver.Url.Contains("inventory.html"))
-				Assert.Fail("Login Failed");
-
+			LoginHelper.Login(Driver ?? throw new Exception("Driver is null"), TestConfig);
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			InventoryItem redTShirt = new(itemName, Driver);
 			redTShirt.AddToCart();
@@ -111,12 +93,7 @@ namespace SauceAppTests.SauceAppTests
 		{
 			_logger!.Information("Starting AddPersonalDetailsForShipping test in Inventory Tests");
 
-			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			loginPage.Login("standard_user", "secret_sauce");
-
-			if (!Driver.Url.Contains("inventory.html"))
-				Assert.Fail("Login Failed");
-
+			LoginHelper.Login(Driver ?? throw new Exception("Driver is null"), TestConfig);
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			InventoryItem redTShirt = new(itemName, Driver);
 			redTShirt.AddToCart();
@@ -139,12 +116,7 @@ namespace SauceAppTests.SauceAppTests
 		{
 			_logger!.Information("Starting AddPersonalDetailsForShipping test in Inventory Tests");
 
-			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			loginPage.Login("standard_user", "secret_sauce");
-
-			if (!Driver.Url.Contains("inventory.html"))
-				Assert.Fail("Login Failed");
-
+			LoginHelper.Login(Driver ?? throw new Exception("Driver is null"), TestConfig);
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			InventoryItem redTShirt = new(itemName, Driver);
 			redTShirt.AddToCart();
@@ -163,12 +135,7 @@ namespace SauceAppTests.SauceAppTests
 		{
 			_logger!.Information("Starting AddPersonalDetailsForShipping test in Inventory Tests");
 
-			LoginPage loginPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
-			loginPage.Login("standard_user", "secret_sauce");
-
-			if (!Driver.Url.Contains("inventory.html"))
-				Assert.Fail("Login Failed");
-
+			LoginHelper.Login(Driver ?? throw new Exception("Driver is null"), TestConfig);
 			InventoryPage inventoryPage = new(Driver ?? throw new ArgumentNullException("Driver is null"));
 			InventoryItem redTShirt = new(itemName, Driver);
 			redTShirt.AddToCart();

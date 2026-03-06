@@ -1,5 +1,5 @@
-﻿
-using Serilog;
+﻿using Serilog;
+using System.Text.Json;
 namespace SauceAppTests.Utillity
 {
 	internal class ConfigReader
@@ -36,5 +36,19 @@ namespace SauceAppTests.Utillity
 			return value;
 		}
 
+		public static Config InitializeConfigVariables()
+		{
+			var configJson = JsonSerializer.Deserialize<Config>(File.ReadAllText(configFilePath));
+			configJson =  configJson ?? throw new Exception("Config Json found as null");
+			return configJson;
+		}
+
+	}
+
+	public class Config
+	{
+		public  string BaseUrl { get; set; } = string.Empty;
+		public  string UserName {  get; set; } = string.Empty;
+		public  string Password { get; set; }	= string.Empty;	
 	}
 }

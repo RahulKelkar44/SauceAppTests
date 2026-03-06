@@ -2,6 +2,7 @@
 using SauceAppTests.Setup;
 using Serilog;
 using SauceAppTests.PageObjects;
+using SauceAppTests.PageObjects.Login;
 namespace SauceAppTests.SauceAppTests;
 
 [TestFixture]
@@ -18,14 +19,11 @@ public class LoginTests : BaseTest
 	[Test, Description("Verify that the user can log in with valid credentials.")]
 	public void ValidLoginTest()
     {
-		logger!.Information("Starting ValidLoginTest");  
+		logger!.Information("Starting ValidLoginTest");
 
-        // Find the username and password fields and enter valid credentials
-        var loginPage = new PageObjects.LoginPage(Driver ?? throw new NullReferenceException("Driver found null"));
-        loginPage.Login("standard_user", "secret_sauce");
-
+		LoginHelper.Login(Driver ?? throw new Exception("Driver is null"), TestConfig);
 		//Initialize Inventory page 
-		var inventoryPage = new PageObjects.InventoryPage(Driver);
+		var inventoryPage = new PageObjects.InventoryPage(Driver?? throw new Exception("Driver is null"));
         // Verify that the user is redirected to the inventory page
         Assert.That(Driver.Url.Contains("inventory.html"), "User was not redirected to the inventory page after valid login.");
 		Assert.That(inventoryPage.PageTitle.Value.Displayed);

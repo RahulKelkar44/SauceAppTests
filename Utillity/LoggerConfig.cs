@@ -25,7 +25,7 @@ namespace SauceAppTests.Utillity
 
 			logger.Information("Serilog configured successfully!");
 			logger.Information("===== Test Run Started =====");
-			GlobalVariable.BaseUrl = ConfigReader.GetConfigValue("baseUrl");
+			GlobalVariable.BaseUrl = ConfigReader.GetConfigValue("BaseUrl");
 
 		}
 		internal static void Dispose()
