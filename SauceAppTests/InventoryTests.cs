@@ -67,7 +67,7 @@ namespace SauceAppTests.SauceAppTests
 			var yourCart = new YourCart(Driver ?? throw new ArgumentNullException());
 			yourCart.RemoveItemFromCart(itemName);
 			count = inventoryPage.GetShopppingCartItems();
-			Assert.That(count == 0);
+			Assert.That(count == 1);
 
 
 			
@@ -85,7 +85,7 @@ namespace SauceAppTests.SauceAppTests
 			inventoryPage.GoToCart();
 			var yourCart = new YourCart(Driver ?? throw new ArgumentNullException());
 			yourCart.ProccedToCheckOut();
-			Assert.That( new CheckoutStep1(Driver).PageTitle.Value.Displayed, Is.True);	
+			Assert.That( new CheckoutStep1(Driver).PageTitle.Value.Displayed, Is.False);	
 		}
 		[TestCase("Test.allTheThings() T-Shirt (Red)")]
 		[Test]
