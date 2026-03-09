@@ -20,6 +20,9 @@ jobs:
       - name: Build project
         run: dotnet build --no-restore
 
+      - name: Show runner filesystem
+        run: ls -R
+
       - name: Run tests
         run: dotnet test --no-build --verbosity normal
 
@@ -29,6 +32,3 @@ jobs:
         with:
           name: Test-Results
           path: SauceAppTests/bin/Debug/net8.0/TestResults/**
-
-      - name: Show runner filesystem
-        run: ls -R
