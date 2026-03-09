@@ -29,3 +29,6 @@ jobs:
         with:
           name: Test-Results
           path: SauceAppTests/bin/Debug/net8.0/TestResults/**
+
+      - name: Show runner filesystem
+        run: ls -R
