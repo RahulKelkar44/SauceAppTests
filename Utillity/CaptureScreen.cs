@@ -1,12 +1,6 @@
 ﻿using OpenQA.Selenium;
 using SauceAppTests.Setup;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SauceAppTests.Utillity
 {
@@ -24,8 +18,7 @@ namespace SauceAppTests.Utillity
 		public static void SaveScreenShot(IWebDriver driver , string testCaseName)
 		{
 			var screenShot = TakeScreenshot(driver);
-			//var safeTestCaseName = string.Concat(testCaseName.Where(c => !Path.GetInvalidPathChars().Contains(c)));
-			var savedFilePath = Path.Combine(GlobalVariable.ScreenShotFilePath, $"Failed-{testCaseName}.png");
+			var savedFilePath = Path.Combine(GlobalVariable.TestResultPath ??  throw new Exception("Test Result Path not found."), $"Failed-{testCaseName}.png");
 			screenShot.SaveAsFile(savedFilePath);
 			logger.Information("Screenshot saved .");
 		}

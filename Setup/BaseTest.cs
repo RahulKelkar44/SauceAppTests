@@ -18,6 +18,12 @@ namespace SauceAppTests.Setup
 		[OneTimeSetUp]
 		public void OneTimeSteup()
 		{
+			var testLog_Path = Path.Combine(GlobalVariable.BaseDirectory, "TestResults" + "\\" + $"TestRun_{DateTime.Now:yyyy-MM-dd_HHmmss}" + "\\");
+			if (!Directory.Exists(testLog_Path))
+			{
+				Directory.CreateDirectory(testLog_Path);
+			}
+			GlobalVariable.TestResultPath = testLog_Path;	
 			LoggerConfig.Initialize();
 			logger.Information("Starting the test run onetime setup");
 		}
@@ -33,18 +39,11 @@ namespace SauceAppTests.Setup
 		[TearDown]
 		public void TearnDown()
 		{
-			//Test Fails
-						logger.Information("Starting the test run teardown");
+			logger.Information("Starting the test run teardown");
 			if (TestContext.CurrentContext.Result.Outcome.Status.ToString().Equals("Failed"))
 			{
 				var currentTestName = TestContext.CurrentContext.Test.MethodName;
 				logger.Information($"Test has failed : {currentTestName} ");
-				var failedTestPath = Path.Combine(GlobalVariable.BaseDirectory,"TestResults" + "\\" + $"TestRun_{DateTime.Now:yyyy-MM-dd_HHmmss}"+"\\");
-				if (!Directory.Exists(failedTestPath)) 
-				{
-					Directory.CreateDirectory(failedTestPath);
-				}
-				GlobalVariable.ScreenShotFilePath = failedTestPath;
 				CaptureScreen.SaveScreenShot(Driver ?? throw new Exception("Driver is null"), currentTestName);
 			}
 			Driver!.Quit();

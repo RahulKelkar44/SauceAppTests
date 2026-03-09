@@ -14,7 +14,7 @@ namespace SauceAppTests.Utillity
 
 			// Create a unique filename based on run timestamp
 			string logFileName = $"TestRun_{DateTime.Now:yyyy-MM-dd_HHmmss}.log";
-			string logFilePath = Path.Combine("Logs", logFileName);
+			string logFilePath = Path.Combine(GlobalVariable.TestResultPath!, logFileName);
 
 			// Configure Serilog
 			Log.Logger = new LoggerConfiguration()
