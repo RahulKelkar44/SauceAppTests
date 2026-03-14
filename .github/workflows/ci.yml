@@ -34,4 +34,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Test-Results
-          path: SauceAppTests/bin/Release/net8.0/TestResults/**
+          path: SauceAppTests/bin/Debug/net8.0/TestResults/**
