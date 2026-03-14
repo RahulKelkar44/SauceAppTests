@@ -18,7 +18,7 @@ namespace SauceAppTests.Setup
 		[OneTimeSetUp]
 		public void OneTimeSteup()
 		{
-			var testLog_Path = Path.Combine(GlobalVariable.BaseDirectory, "TestResults" + "\\" + $"TestRun_{DateTime.Now:yyyy-MM-dd_HHmmss}" + "\\");
+			var testLog_Path = Path.Combine(GlobalVariable.BaseDirectory, "TestResults", $"TestRun_{DateTime.Now:yyyy-MM-dd_HHmmss}");
 			if (!Directory.Exists(testLog_Path))
 			{
 				TestContext.Progress.WriteLine("Creating TestResults and TestRun directory"	);
