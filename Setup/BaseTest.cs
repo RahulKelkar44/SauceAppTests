@@ -21,9 +21,12 @@ namespace SauceAppTests.Setup
 			var testLog_Path = Path.Combine(GlobalVariable.BaseDirectory, "TestResults" + "\\" + $"TestRun_{DateTime.Now:yyyy-MM-dd_HHmmss}" + "\\");
 			if (!Directory.Exists(testLog_Path))
 			{
+				Console.WriteLine("Creating TestResults and TestRun directory"	);
 				Directory.CreateDirectory(testLog_Path);
 			}
-			GlobalVariable.TestResultPath = testLog_Path;	
+			GlobalVariable.TestResultPath = testLog_Path;
+			Console.WriteLine("TestResults folder creation done and TestResultsPath Variable is set");
+			Console.WriteLine($"TestResults Path : {testLog_Path}");
 			LoggerConfig.Initialize();
 			logger.Information("Starting the test run onetime setup");
 		}
