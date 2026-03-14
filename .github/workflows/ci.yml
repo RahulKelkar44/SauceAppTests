@@ -23,6 +23,9 @@ jobs:
       - name: Show runner filesystem
         run: ls -R
 
+      - name: Find TestResults folder
+        run: find . -type d -name "TestResults"
+
       - name: Run tests
         run: dotnet test --no-build --verbosity normal
 
