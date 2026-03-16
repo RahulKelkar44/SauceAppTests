@@ -30,6 +30,7 @@ jobs:
         run: dotnet test --no-build --verbosity normal
 
       - name: Show TestResults after TestRun
+        if: always()
         run: ls -R TestResults || echo "TestResults not found"
 
       - name: Upload Test Results
