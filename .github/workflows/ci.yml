@@ -29,6 +29,10 @@ jobs:
       - name: Run tests
         run: dotnet test --no-build --verbosity normal
 
+      - name: Show bin folder
+        if: always()
+        run: ls -R bin
+
       - name: Show TestResults after TestRun
         if: always()
         run: ls -R TestResults || echo "TestResults not found"
@@ -38,4 +42,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Test-Results
-          path: TestResults/**
+          path: "**/TestResults/**"
+s
