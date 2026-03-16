@@ -8,7 +8,7 @@ namespace SauceAppTests.Setup
 	{
 		internal static string? BaseUrl { get; set; }
 
-		internal static string BaseDirectory = TestContext.CurrentContext.TestDirectory;
+		internal static string BaseDirectory = Directory.GetCurrentDirectory();
 		internal static string? TestResultPath { get; set; }
 
 	}

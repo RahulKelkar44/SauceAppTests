@@ -29,9 +29,12 @@ jobs:
       - name: Run tests
         run: dotnet test --no-build --verbosity normal
 
-      - name: publish-test-results
+      - name: Show TestResults after TestRun
+        run: ls -R TestResults || echo "TestResults not found"
+
+      - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Test-Results
-          path: SauceAppTests/bin/Debug/net8.0/TestResults/**
+          path: TestResults/**
